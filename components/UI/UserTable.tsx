@@ -1,51 +1,47 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FiEye, FiEdit } from 'react-icons/fi';
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  lastLogin: string;
-  status: 'Unrestricted' | 'Restricted';
-}
+import { UserTableData, EditUserFormData } from '@/types';
+import { COLORS } from '@/constants';
+import Modal from './Modal';
+import Button from './Button';
+import Input from './Input';
 
 interface UserTableProps {
-  users: User[];
+  users: UserTableData[];
   onAction: (userId: string) => void;
 }
 
-export default function UserTable({ users, onAction }: UserTableProps) {
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+const UserTable: React.FC<UserTableProps> = ({ users, onAction }) => {
+  const [selectedUser, setSelectedUser] = useState<UserTableData | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editForm, setEditForm] = useState({
+  const [editForm, setEditForm] = useState<EditUserFormData>({
     name: '',
     email: '',
-    status: 'Unrestricted' as 'Unrestricted' | 'Restricted'
+    status: 'Unrestricted',
   });
 
-  const handleViewDetails = (user: User) => {
+  const handleViewDetails = (user: UserTableData) => {
     setSelectedUser(user);
     setShowDetails(true);
   };
 
-  const handleEditUser = (user: User) => {
+  const handleEditUser = (user: UserTableData) => {
     setSelectedUser(user);
     setEditForm({
       name: user.name,
       email: user.email,
-      status: user.status
+      status: user.status,
     });
     setShowEditModal(true);
   };
 
   const handleSaveEdit = () => {
     if (selectedUser) {
-      // Here you would typically make an API call to update the user
       console.log('Saving user:', selectedUser.id, editForm);
-      onAction(selectedUser.id); // Trigger parent action
+      onAction(selectedUser.id);
       setShowEditModal(false);
       setSelectedUser(null);
     }
@@ -57,9 +53,63 @@ export default function UserTable({ users, onAction }: UserTableProps) {
     setSelectedUser(null);
   };
 
+  const getStatusClasses = (status: 'Unrestricted' | 'Restricted') => {
+    return status === 'Unrestricted'
+      ? `${COLORS.STATUS.UNRESTRICTED.BG} ${COLORS.STATUS.UNRESTRICTED.TEXT}`
+      : `${COLORS.STATUS.RESTRICTED.BG} ${COLORS.STATUS.RESTRICTED.TEXT}`;
+  };
+
   return (
     <>
-      <div className="overflow-x-auto">
+      {/* Mobile Card View */}
+      <div className="lg:hidden space-y-4">
+        {users.map((user, index) => (
+          <div key={index} className="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm font-medium text-gray-900 truncate">{user.name}</h3>
+                <p className="text-xs text-gray-500 truncate">{user.email}</p>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => handleViewDetails(user)}
+                  className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                  title="View Details"
+                  aria-label="View user details"
+                >
+                  <FiEye className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleEditUser(user)}
+                  className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                  title="Edit User"
+                  aria-label="Edit user"
+                >
+                  <FiEdit className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 text-xs">
+              <div>
+                <span className="text-gray-500">ID:</span>
+                <span className="ml-1 font-medium text-gray-900">{user.id}</span>
+              </div>
+              <div>
+                <span className="text-gray-500">Last Login:</span>
+                <span className="ml-1 font-medium text-gray-900">{user.lastLogin}</span>
+              </div>
+            </div>
+            <div className="mt-3">
+              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusClasses(user.status)}`}>
+                {user.status}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table View */}
+      <div className="hidden lg:block overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -99,11 +149,7 @@ export default function UserTable({ users, onAction }: UserTableProps) {
                   {user.lastLogin}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                    user.status === 'Unrestricted'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
-                  }`}>
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusClasses(user.status)}`}>
                     {user.status}
                   </span>
                 </td>
@@ -113,6 +159,7 @@ export default function UserTable({ users, onAction }: UserTableProps) {
                       onClick={() => handleViewDetails(user)}
                       className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
                       title="View Details"
+                      aria-label="View user details"
                     >
                       <FiEye className="w-4 h-4" />
                     </button>
@@ -120,6 +167,7 @@ export default function UserTable({ users, onAction }: UserTableProps) {
                       onClick={() => handleEditUser(user)}
                       className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
                       title="Edit User"
+                      aria-label="Edit user"
                     >
                       <FiEdit className="w-4 h-4" />
                     </button>
@@ -132,139 +180,96 @@ export default function UserTable({ users, onAction }: UserTableProps) {
       </div>
 
       {/* User Details Modal */}
-      {showDetails && selectedUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">User Details</h3>
-              <button
-                onClick={closeModal}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+      <Modal
+        isOpen={showDetails}
+        onClose={closeModal}
+        title="User Details"
+      >
+        {selectedUser && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">User ID</label>
+              <p className="mt-1 text-sm text-gray-900">{selectedUser.id}</p>
             </div>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">User ID</label>
-                <p className="mt-1 text-sm text-gray-900">{selectedUser.id}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Name</label>
-                <p className="mt-1 text-sm text-gray-900">{selectedUser.name}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Email</label>
-                <p className="mt-1 text-sm text-gray-900">{selectedUser.email}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Last Login</label>
-                <p className="mt-1 text-sm text-gray-900">{selectedUser.lastLogin}</p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Status</label>
-                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full mt-1 ${
-                  selectedUser.status === 'Unrestricted'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {selectedUser.status}
-                </span>
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Name</label>
+              <p className="mt-1 text-sm text-gray-900">{selectedUser.name}</p>
             </div>
-            <div className="mt-6 flex justify-end">
-              <button
-                onClick={closeModal}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
-              >
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <p className="mt-1 text-sm text-gray-900">{selectedUser.email}</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Last Login</label>
+              <p className="mt-1 text-sm text-gray-900">{selectedUser.lastLogin}</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Status</label>
+              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full mt-1 ${getStatusClasses(selectedUser.status)}`}>
+                {selectedUser.status}
+              </span>
+            </div>
+            <div className="flex justify-end pt-4">
+              <Button variant="secondary" onClick={closeModal}>
                 Close
-              </button>
+              </Button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
 
       {/* Edit User Modal */}
-      {showEditModal && selectedUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Edit User</h3>
-              <button
-                onClick={closeModal}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+      <Modal
+        isOpen={showEditModal}
+        onClose={closeModal}
+        title="Edit User"
+      >
+        {selectedUser && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">User ID</label>
+              <p className="mt-1 text-sm text-gray-500">{selectedUser.id}</p>
             </div>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">User ID</label>
-                <p className="mt-1 text-sm text-gray-500">{selectedUser.id}</p>
-              </div>
-              <div>
-                <label htmlFor="edit-name" className="block text-sm font-medium text-gray-700">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="edit-name"
-                  value={editForm.name}
-                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A25BA6] focus:border-[#A25BA6]"
-                />
-              </div>
-              <div>
-                <label htmlFor="edit-email" className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="edit-email"
-                  value={editForm.email}
-                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A25BA6] focus:border-[#A25BA6]"
-                />
-              </div>
-              <div>
-                <label htmlFor="edit-status" className="block text-sm font-medium text-gray-700">
-                  Status
-                </label>
-                <select
-                  id="edit-status"
-                  value={editForm.status}
-                  onChange={(e) => setEditForm({ ...editForm, status: e.target.value as 'Unrestricted' | 'Restricted' })}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A25BA6] focus:border-[#A25BA6]"
-                >
-                  <option value="Unrestricted">Unrestricted</option>
-                  <option value="Restricted">Restricted</option>
-                </select>
-              </div>
-            </div>
-            <div className="mt-6 flex justify-end space-x-3">
-              <button
-                onClick={closeModal}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+            <Input
+              label="Name"
+              value={editForm.name}
+              onChange={(value) => setEditForm({ ...editForm, name: value })}
+              placeholder="Enter user name"
+            />
+            <Input
+              type="email"
+              label="Email"
+              value={editForm.email}
+              onChange={(value) => setEditForm({ ...editForm, email: value })}
+              placeholder="Enter email address"
+            />
+            <div>
+              <label htmlFor="edit-status" className="block text-sm font-medium text-gray-700">
+                Status
+              </label>
+              <select
+                id="edit-status"
+                value={editForm.status}
+                onChange={(e) => setEditForm({ ...editForm, status: e.target.value as 'Unrestricted' | 'Restricted' })}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A25BA6] focus:border-[#A25BA6]"
               >
+                <option value="Unrestricted">Unrestricted</option>
+                <option value="Restricted">Restricted</option>
+              </select>
+            </div>
+            <div className="flex justify-end space-x-3 pt-4">
+              <Button variant="secondary" onClick={closeModal}>
                 Cancel
-              </button>
-              <button
-                onClick={handleSaveEdit}
-                className="px-4 py-2 text-sm font-medium text-white rounded-md transition-all duration-200 hover:opacity-90"
-                style={{
-                  background: `linear-gradient(90deg, #A25BA6 0%, #589DD6 100%)`
-                }}
-              >
+              </Button>
+              <Button onClick={handleSaveEdit}>
                 Save Changes
-              </button>
+              </Button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </>
   );
-}
+};
+
+export default UserTable;

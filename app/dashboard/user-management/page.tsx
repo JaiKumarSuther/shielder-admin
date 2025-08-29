@@ -1,122 +1,122 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Sidebar from '../../../components/UI/Sidebar';
 import Header from '../../../components/UI/Header';
-import SearchBar from '../../../components/UI/SearchBar';
 import UserTable from '../../../components/UI/UserTable';
+import SearchBar from '../../../components/UI/SearchBar';
+import { UserTableData } from '@/types';
+import { COLORS } from '@/constants';
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  lastLogin: string;
-  status: 'Unrestricted' | 'Restricted';
-}
-
-export default function UserManagement() {
+const UserManagement: React.FC = () => {
   const [activeNav, setActiveNav] = useState('user-management');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const users: User[] = [
+  // Mock user data matching the image description
+  const mockUsers: UserTableData[] = [
     {
       id: '423',
       name: 'Apple Watch',
-      email: 'example234@gmail.com',
-      lastLogin: '12.09.2019 - 12.53 PM',
+      email: 'exar@example.com',
+      lastLogin: '2024-01-15 10:30',
       status: 'Unrestricted'
     },
     {
-      id: '423',
-      name: 'Apple Watch',
-      email: 'example234@gmail.com',
-      lastLogin: '12.09.2019 - 12.53 PM',
-      status: 'Unrestricted'
-    },
-    {
-      id: '423',
-      name: 'Apple Watch',
-      email: 'example234@gmail.com',
-      lastLogin: '12.09.2019 - 12.53 PM',
-      status: 'Unrestricted'
-    },
-    {
-      id: '423',
-      name: 'Apple Watch',
-      email: 'example234@gmail.com',
-      lastLogin: '12.09.2019 - 12.53 PM',
-      status: 'Unrestricted'
-    },
-    {
-      id: '423',
-      name: 'Apple Watch',
-      email: 'example234@gmail.com',
-      lastLogin: '12.09.2019 - 12.53 PM',
-      status: 'Unrestricted'
-    },
-    {
-      id: '423',
-      name: 'Apple Watch',
-      email: 'example234@gmail.com',
-      lastLogin: '12.09.2019 - 12.53 PM',
+      id: '424',
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      lastLogin: '2024-01-14 15:45',
       status: 'Restricted'
     },
     {
-      id: '423',
-      name: 'Apple Watch',
-      email: 'example234@gmail.com',
-      lastLogin: '12.09.2019 - 12.53 PM',
+      id: '425',
+      name: 'Jane Smith',
+      email: 'jane.smith@example.com',
+      lastLogin: '2024-01-13 09:20',
+      status: 'Unrestricted'
+    },
+    {
+      id: '426',
+      name: 'Bob Johnson',
+      email: 'bob.johnson@example.com',
+      lastLogin: '2024-01-12 14:15',
+      status: 'Unrestricted'
+    },
+    {
+      id: '427',
+      name: 'Alice Brown',
+      email: 'alice.brown@example.com',
+      lastLogin: '2024-01-11 11:30',
+      status: 'Restricted'
+    },
+    {
+      id: '428',
+      name: 'Charlie Wilson',
+      email: 'charlie.wilson@example.com',
+      lastLogin: '2024-01-10 16:20',
+      status: 'Unrestricted'
+    },
+    {
+      id: '429',
+      name: 'Diana Davis',
+      email: 'diana.davis@example.com',
+      lastLogin: '2024-01-09 13:45',
       status: 'Restricted'
     }
   ];
 
-  const handleNavChange = (navId: string) => {
-    setActiveNav(navId);
-    // Handle navigation logic here
-    console.log('Navigating to:', navId);
-  };
-
-  const handleAction = (userId: string) => {
-    // Handle action logic here
-    console.log('Action clicked for user:', userId);
-  };
-
-  const filteredUsers = users.filter(user =>
+  const filteredUsers = mockUsers.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.id.includes(searchTerm)
   );
 
+  const handleAction = (userId: string) => {
+    console.log('Action performed on user:', userId);
+  };
+
+  const handleNavChange = (navId: string) => {
+    setActiveNav(navId);
+  };
+
   return (
-    <div className="min-h-screen bg-[#F1F4F9] flex">
+    <div className="min-h-screen flex" style={{ backgroundColor: COLORS.BACKGROUND.CONTENT }}>
       {/* Sidebar */}
       <Sidebar activeNav={activeNav} onNavChange={handleNavChange} />
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="flex-1 lg:ml-0">
         {/* Header */}
         <Header title="User Management" />
 
-        {/* User Management Content */}
-        <main className="p-8">
-          <div className="bg-white rounded-lg shadow-sm">
-            {/* Search Section */}
-            <div className="p-6 border-b border-gray-200">
-              <SearchBar 
-                value={searchTerm}
-                onChange={setSearchTerm}
-                placeholder="Search"
-              />
+        {/* Content */}
+        <main className="p-4 sm:p-6 lg:p-8">
+          {/* Search and Controls */}
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-6 border border-gray-200">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="flex-1 max-w-sm">
+                <SearchBar
+                  value={searchTerm}
+                  onChange={setSearchTerm}
+                  placeholder="Search users..."
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">
+                  {filteredUsers.length} of {mockUsers.length} users
+                </span>
+              </div>
             </div>
+          </div>
 
-            {/* Table Section */}
-            <UserTable 
-              users={filteredUsers}
-              onAction={handleAction}
-            />
+          {/* User Table */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <UserTable users={filteredUsers} onAction={handleAction} />
           </div>
         </main>
       </div>
     </div>
   );
-}
+};
+
+export default UserManagement;

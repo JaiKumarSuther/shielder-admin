@@ -1,34 +1,64 @@
 'use client';
 
+import React, { useState } from 'react';
+import { FiChevronDown } from 'react-icons/fi';
+import Image from 'next/image';
 import { useAuth } from '../context/AuthContext';
 
 interface HeaderProps {
   title: string;
 }
 
-export default function Header({ title }: HeaderProps) {
+const Header: React.FC<HeaderProps> = ({ title }) => {
   const { user } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
-    <header className="bg-white border-b border-gray-200 px-8 py-4">
+    <header className="bg-white border-b border-gray-200 px-4 sm:px-6 lg:px-8 py-4">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+            {title}
+          </h1>
         </div>
+        
         <div className="flex items-center space-x-4">
           {user && (
             <div className="flex items-center space-x-3">
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">{user.name}</p>
-                <p className="text-xs text-gray-500">{user.role}</p>
+              {/* Avatar */}
+              <div className="relative">
+                <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200">
+                  <Image
+                    src="/assets/admin.jpg"
+                    alt="Profile"
+                    width={40}
+                    height={40}
+                    className="w-full h-full object-cover"
+                    priority
+                  />
+                </div>
               </div>
-              <div className="w-8 h-8 bg-gradient-to-r from-[#9E5EA8] to-[#5C9AD4] rounded-full flex items-center justify-center">
-                <span className="text-white text-sm font-medium">{user.initials}</span>
+              
+              {/* User Info */}
+              <div className="hidden sm:block">
+                <p className="text-sm font-semibold text-gray-900">{user.name}</p>
+                <p className="text-xs text-gray-600">{user.role}</p>
               </div>
+              
+              {/* Dropdown Button */}
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                aria-label="User menu"
+              >
+                <FiChevronDown className="w-4 h-4 text-gray-600" />
+              </button>
             </div>
           )}
         </div>
       </div>
     </header>
   );
-}
+};
+
+export default Header;

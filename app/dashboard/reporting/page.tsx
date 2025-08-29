@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { 
+import React, { useState } from 'react';
+import {
   FiUsers,
   FiPackage,
   FiTrendingUp
@@ -9,11 +9,13 @@ import {
 import Sidebar from '../../../components/UI/Sidebar';
 import Header from '../../../components/UI/Header';
 import ReportCard from '../../../components/UI/ReportCard';
+import { ReportData } from '@/types';
+import { COLORS } from '@/constants';
 
-export default function Reporting() {
+const Reporting: React.FC = () => {
   const [activeNav, setActiveNav] = useState('reporting');
 
-  const reportData = [
+  const reportData: ReportData[] = [
     {
       title: 'Unrestricted Users',
       value: '40,689',
@@ -39,30 +41,22 @@ export default function Reporting() {
 
   const handleNavChange = (navId: string) => {
     setActiveNav(navId);
-    // Handle navigation logic here
-    console.log('Navigating to:', navId);
-  };
-
-  const handleDownload = (reportType: string) => {
-    // Handle download logic here
-    console.log('Downloading report:', reportType);
-    // In a real app, this would trigger a file download
   };
 
   return (
-    <div className="min-h-screen bg-[#F1F4F9] flex">
+    <div className="min-h-screen flex" style={{ backgroundColor: COLORS.BACKGROUND.CONTENT }}>
       {/* Sidebar */}
       <Sidebar activeNav={activeNav} onNavChange={handleNavChange} />
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="flex-1 lg:ml-0">
         {/* Header */}
         <Header title="Reporting" />
 
-        {/* Reporting Content */}
-        <main className="p-8">
+        {/* Content */}
+        <main className="p-4 sm:p-6 lg:p-8">
           {/* Report Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
             {reportData.map((report, index) => (
               <ReportCard
                 key={index}
@@ -71,13 +65,12 @@ export default function Reporting() {
                 icon={report.icon}
                 iconBg={report.iconBg}
                 iconColor={report.iconColor}
-                onDownload={handleDownload}
               />
             ))}
           </div>
 
           {/* Additional Content Area */}
-          <div className="mt-8 bg-white rounded-lg shadow-sm p-6">
+          <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">Report History</h2>
             <p className="text-gray-500">No recent reports to display.</p>
           </div>
@@ -85,4 +78,6 @@ export default function Reporting() {
       </div>
     </div>
   );
-}
+};
+
+export default Reporting;

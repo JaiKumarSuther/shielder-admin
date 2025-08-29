@@ -35,20 +35,21 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#A25BA6] to-[#589DD6] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo and Branding */}
-        <div className="text-center mb-8">
+        {/* Logo */}
+        <div className="text-center mb-6 sm:mb-8">
           <Image
             src="/assets/logo.png"
             alt="Shieldr Logo"
             width={200}
             height={80}
             className="mx-auto"
+            priority
           />
         </div>
 
-        {/* Dynamic Form Component */}
+        {/* Form */}
         {renderCurrentView()}
       </div>
     </div>

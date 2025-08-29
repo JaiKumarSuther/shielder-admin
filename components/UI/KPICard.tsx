@@ -1,3 +1,6 @@
+'use client';
+
+import React from 'react';
 import { FiTrendingUp, FiTrendingDown } from 'react-icons/fi';
 
 interface KPICardProps {
@@ -10,7 +13,7 @@ interface KPICardProps {
   iconColor: string;
 }
 
-export default function KPICard({
+const KPICard: React.FC<KPICardProps> = ({
   title,
   value,
   trend,
@@ -18,26 +21,36 @@ export default function KPICard({
   icon: Icon,
   iconBg,
   iconColor
-}: KPICardProps) {
+}) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
-      <div className="flex items-center justify-between mb-4">
-        <div className={`w-12 h-12 ${iconBg} rounded-lg flex items-center justify-center`}>
-          <Icon className={`w-6 h-6 ${iconColor}`} />
+    <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200">
+      <div className="flex items-center justify-between">
+        <div className="flex-1 min-w-0">
+          <p className="text-sm sm:text-base font-medium text-gray-600 truncate">
+            {title}
+          </p>
+          <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mt-1">
+            {value}
+          </p>
+          <div className="flex items-center mt-2">
+            {trendType === 'up' ? (
+              <FiTrendingUp className="w-4 h-4 mr-1 text-green-500" />
+            ) : (
+              <FiTrendingDown className="w-4 h-4 mr-1 text-red-500" />
+            )}
+            <span className={`text-xs sm:text-sm font-medium ${
+              trendType === 'up' ? 'text-green-600' : 'text-red-600'
+            }`}>
+              {trend}
+            </span>
+          </div>
         </div>
-        <div className={`flex items-center text-sm ${
-          trendType === 'up' ? 'text-green-600' : 'text-red-600'
-        }`}>
-          {trendType === 'up' ? (
-            <FiTrendingUp className="w-4 h-4 mr-1" />
-          ) : (
-            <FiTrendingDown className="w-4 h-4 mr-1" />
-          )}
-          {trend}
+        <div className={`ml-4 p-2 sm:p-3 rounded-lg ${iconBg}`}>
+          <Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${iconColor}`} />
         </div>
       </div>
-      <h3 className="text-2xl font-bold text-gray-900 mb-1">{value}</h3>
-      <p className="text-sm text-gray-600">{title}</p>
     </div>
   );
-}
+};
+
+export default KPICard;

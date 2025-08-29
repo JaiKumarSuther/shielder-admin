@@ -1,51 +1,93 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiEye, FiEyeOff, FiMail, FiLock } from 'react-icons/fi';
 import { useAuth } from './context/AuthContext';
+import { LoginFormData } from '@/types';
+import { validateEmail } from '@/utils';
+import { ERROR_MESSAGES } from '@/constants';
+import Button from './UI/Button';
+import Input from './UI/Input';
 
 interface LoginFormProps {
   onForgotPassword: () => void;
   onSignUp: () => void;
 }
 
-export default function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps) {
+const LoginForm: React.FC<LoginFormProps> = ({ onForgotPassword, onSignUp }) => {
   const router = useRouter();
   const { login } = useAuth();
+  
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: 'iamjaisuthar@gmail.com',
+    password: 'admin123',
+    rememberMe: false,
+  });
+  
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState('Loisbecket@gmail.com');
-  const [password, setPassword] = useState('********');
-  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<Partial<LoginFormData>>({});
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
+  const validateForm = (): boolean => {
+    const newErrors: Partial<LoginFormData> = {};
+
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters long';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (field: keyof LoginFormData, value: string | boolean) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
     setIsLoading(true);
     
     try {
-      const success = await login(email, password);
+      const success = await login(formData.email, formData.password);
       if (success) {
         router.push('/dashboard');
       } else {
-        // Handle login error
-        console.error('Login failed');
+        setErrors({ email: ERROR_MESSAGES.GENERIC });
       }
     } catch (error) {
       console.error('Login error:', error);
+      setErrors({ email: ERROR_MESSAGES.GENERIC });
     } finally {
       setIsLoading(false);
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-100">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">
+    <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8 border border-gray-100 w-full max-w-md mx-auto">
+      <div className="text-center mb-4 sm:mb-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
           Welcome Back!
         </h2>
         <p className="text-gray-600 text-sm">
@@ -53,60 +95,52 @@ export default function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Email Input */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25BA6] focus:border-transparent"
-            placeholder="Enter your email"
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        <Input
+          type="email"
+          label="Email"
+          value={formData.email}
+          onChange={(value) => handleInputChange('email', value)}
+          placeholder="Enter your email"
+          required
+          error={errors.email}
+          icon={<FiMail />}
+          iconPosition="left"
+        />
+
+        <div className="relative">
+          <Input
+            type={showPassword ? "text" : "password"}
+            label="Password"
+            value={formData.password}
+            onChange={(value) => handleInputChange('password', value)}
+            placeholder="Enter your password"
             required
+            error={errors.password}
+            icon={<FiLock />}
+            iconPosition="left"
           />
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center top-6"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? (
+              <FiEyeOff className="h-5 w-5 text-gray-400" />
+            ) : (
+              <FiEye className="h-5 w-5 text-gray-400" />
+            )}
+          </button>
         </div>
 
-        {/* Password Input */}
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-            Password
-          </label>
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25BA6] focus:border-transparent"
-              placeholder="Enter your password"
-              required
-            />
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
-            >
-              {showPassword ? (
-                <FiEyeOff className="h-5 w-5 text-gray-400" />
-              ) : (
-                <FiEye className="h-5 w-5 text-gray-400" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Remember Me and Forgot Password */}
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <input
               id="remember-me"
               type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
+              checked={formData.rememberMe}
+              onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
               className="h-4 w-4 text-[#A25BA6] focus:ring-[#A25BA6] border-gray-300 rounded"
             />
             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
@@ -118,23 +152,19 @@ export default function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps
             onClick={onForgotPassword}
             className="text-sm text-[#A25BA6] hover:underline"
           >
-            Forgot Password ?
+            Forgot Password?
           </button>
         </div>
 
-        {/* Login Button */}
-        <button
+        <Button
           type="submit"
+          loading={isLoading}
           disabled={isLoading}
-          className="w-full py-3 px-4 rounded-md text-white font-medium text-sm transition-all duration-200 hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{
-            background: `linear-gradient(90deg, #A25BA6 0%, #589DD6 100%)`
-          }}
+          className="w-full"
         >
           {isLoading ? 'Logging In...' : 'Log In'}
-        </button>
+        </Button>
 
-        {/* Forgot Password Link */}
         <div className="text-center">
           <button
             type="button"
@@ -145,11 +175,10 @@ export default function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps
           </button>
         </div>
 
-        {/* Sign Up Link */}
         <div className="text-center pt-4 border-t border-gray-200">
-                     <span className="text-sm text-gray-600">
-             Don&apos;t have an account?{' '}
-           </span>
+          <span className="text-sm text-gray-600">
+            Don&apos;t have an account?{' '}
+          </span>
           <button
             type="button"
             onClick={onSignUp}
@@ -161,4 +190,6 @@ export default function LoginForm({ onForgotPassword, onSignUp }: LoginFormProps
       </form>
     </div>
   );
-}
+};
+
+export default LoginForm;

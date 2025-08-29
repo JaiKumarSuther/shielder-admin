@@ -1,61 +1,100 @@
+'use client';
+
+import React, { useState } from 'react';
 import { 
   FiCheck, 
   FiList, 
   FiUsers, 
   FiSettings, 
-  FiLogOut 
+  FiLogOut,
+  FiMenu,
+  FiX
 } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useAuth } from '../context/AuthContext';
+import { NavigationItem } from '@/types';
+import { COLORS } from '@/constants';
+import LoadingSpinner from './LoadingSpinner';
+import { MdSpaceDashboard } from 'react-icons/md';
 
 interface SidebarProps {
   activeNav: string;
   onNavChange: (navId: string) => void;
 }
 
-export default function Sidebar({ activeNav, onNavChange }: SidebarProps) {
+const Sidebar: React.FC<SidebarProps> = ({ activeNav, onNavChange }) => {
   const router = useRouter();
   const { logout } = useAuth();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
 
-  const navigationItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: FiCheck },
-    { id: 'reporting', label: 'Reporting', icon: FiList },
-    { id: 'user-management', label: 'User Management', icon: FiUsers }
+  const navigationItems: NavigationItem[] = [
+    { id: 'dashboard', label: 'Dashboard', icon: MdSpaceDashboard , path: '/dashboard' },
+    { id: 'reporting', label: 'Reporting', icon: FiList, path: '/dashboard/reporting' },
+    { id: 'user-management', label: 'User Management', icon: FiUsers, path: '/dashboard/user-management' }
   ];
 
-  const bottomNavItems = [
-    { id: 'settings', label: 'Settings', icon: FiSettings },
+  const bottomNavItems: NavigationItem[] = [
+    { id: 'settings', label: 'Settings', icon: FiSettings, path: '/dashboard/settings' },
     { id: 'logout', label: 'Logout', icon: FiLogOut }
   ];
 
-  const handleNavClick = (navId: string) => {
+  const handleNavClick = async (navId: string) => {
     if (navId === 'logout') {
       logout();
       router.push('/');
-    } else if (navId === 'reporting') {
-      router.push('/dashboard/reporting');
-    } else if (navId === 'dashboard') {
-      router.push('/dashboard');
-    } else if (navId === 'user-management') {
-      router.push('/dashboard/user-management');
     } else {
-      onNavChange(navId);
+      const navItem = [...navigationItems, ...bottomNavItems].find(item => item.id === navId);
+      if (navItem?.path) {
+        setIsNavigating(true);
+        setNavigatingTo(navItem.path);
+        onNavChange(navId);
+        router.push(navItem.path);
+        
+        // Reset navigation state after a short delay
+        setTimeout(() => {
+          setIsNavigating(false);
+          setNavigatingTo(null);
+        }, 1000);
+      }
     }
+    // Close mobile menu after navigation
+    setIsMobileMenuOpen(false);
   };
 
-     return (
-     <div className="w-64 bg-white p-6 relative">
-             {/* Logo */}
-       <div className="mb-8">
-         <Image
-           src="/assets/logo.png"
-           alt="Shieldr Logo"
-           width={160}
-           height={64}
-           className="mx-auto"
-         />
-       </div>
+  const getNavButtonClasses = (itemId: string) => {
+    const baseClasses = 'w-full flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-colors';
+    const isActive = activeNav === itemId;
+    const isNavigatingToThis = navigatingTo === [...navigationItems, ...bottomNavItems].find(item => item.id === itemId)?.path;
+    
+    return `${baseClasses} ${
+      isActive
+        ? 'text-white'
+        : isNavigatingToThis
+        ? 'text-gray-500 bg-gray-100'
+        : 'text-gray-700 hover:bg-gray-200'
+    }`;
+  };
+
+  const getActiveStyle = (itemId: string) => {
+    return activeNav === itemId ? { background: COLORS.SIDEBAR.GRADIENT } : {};
+  };
+
+  const SidebarContent = () => (
+    <>
+      {/* Logo */}
+      <div className="mb-8">
+        <Image
+          src="/assets/logo.png"
+          alt="Shieldr Logo"
+          width={160}
+          height={64}
+          className="mx-auto"
+          priority
+        />
+      </div>
 
       {/* Navigation */}
       <nav className="space-y-2">
@@ -63,17 +102,17 @@ export default function Sidebar({ activeNav, onNavChange }: SidebarProps) {
           <button
             key={item.id}
             onClick={() => handleNavClick(item.id)}
-                         className={`w-full flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-               activeNav === item.id
-                 ? 'text-white'
-                 : 'text-gray-700 hover:bg-gray-200'
-             }`}
-             style={activeNav === item.id ? {
-               background: `linear-gradient(90deg, #9E5EA8 0%, #5C9AD4 100%)`
-             } : {}}
+            className={getNavButtonClasses(item.id)}
+            style={getActiveStyle(item.id)}
+            aria-label={item.label}
+            disabled={isNavigating}
           >
-            <item.icon className="w-5 h-5 mr-3" />
-            {item.label}
+            {isNavigating && navigatingTo === item.path ? (
+              <LoadingSpinner size="sm" className="mr-3" />
+            ) : (
+              <item.icon className="w-5 h-5 mr-3 flex-shrink-0" />
+            )}
+            <span className="truncate">{item.label}</span>
           </button>
         ))}
       </nav>
@@ -85,14 +124,65 @@ export default function Sidebar({ activeNav, onNavChange }: SidebarProps) {
             <button
               key={item.id}
               onClick={() => handleNavClick(item.id)}
-              className="w-full flex items-center px-4 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors"
+              className={getNavButtonClasses(item.id)}
+              style={getActiveStyle(item.id)}
+              aria-label={item.label}
+              disabled={isNavigating}
             >
-              <item.icon className="w-5 h-5 mr-3" />
-              {item.label}
+              {isNavigating && navigatingTo === item.path ? (
+                <LoadingSpinner size="sm" className="mr-3" />
+              ) : (
+                <item.icon className="w-5 h-5 mr-3 flex-shrink-0" />
+              )}
+              <span className="truncate">{item.label}</span>
             </button>
           ))}
         </nav>
       </div>
-    </div>
+    </>
   );
-}
+
+  return (
+    <>
+      {/* Mobile Menu Button */}
+      <div className="lg:hidden fixed top-4 left-4 z-50">
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2 bg-white rounded-lg shadow-lg border border-gray-200"
+          aria-label="Toggle menu"
+        >
+          {isMobileMenuOpen ? (
+            <FiX className="w-6 h-6 text-gray-700" />
+          ) : (
+            <FiMenu className="w-6 h-6 text-gray-700" />
+          )}
+        </button>
+      </div>
+
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-25 z-40"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
+      {/* Mobile Sidebar */}
+      <div className={`
+        lg:hidden fixed top-0 left-0 h-full w-64 bg-white z-50 transform transition-transform duration-300 ease-in-out
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        <div className="p-6 relative h-full">
+          <SidebarContent />
+        </div>
+      </div>
+
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block w-64 bg-white p-6 relative">
+        <SidebarContent />
+      </div>
+    </>
+  );
+};
+
+export default Sidebar;
