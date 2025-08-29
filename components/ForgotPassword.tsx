@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import { FiArrowLeft, FiMail } from 'react-icons/fi';
+import React, { useState } from 'react';
+import { FiMail, FiArrowLeft } from 'react-icons/fi';
+import { COLORS } from '@/constants';
 
 interface ForgotPasswordProps {
   onBackToLogin: () => void;
@@ -36,7 +37,7 @@ export default function ForgotPassword({ onBackToLogin }: ForgotPasswordProps) {
            </p>
           <button
             onClick={() => setIsSubmitted(false)}
-            className="text-sm text-[#589DD6] hover:underline mb-4 block"
+            className="text-sm text-blue-600 hover:underline mb-4 block cursor-pointer"
           >
             Try another email address
           </button>
@@ -74,7 +75,7 @@ export default function ForgotPassword({ onBackToLogin }: ForgotPasswordProps) {
             id="reset-email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25BA6] focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Enter your email address"
             required
           />
@@ -83,9 +84,9 @@ export default function ForgotPassword({ onBackToLogin }: ForgotPasswordProps) {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-3 px-4 rounded-md text-white font-medium text-sm transition-all duration-200 hover:opacity-90"
+          className="w-full py-3 px-4 rounded-md text-white font-medium text-sm transition-all duration-200 hover:bg-blue-700"
           style={{
-            background: `linear-gradient(90deg, #A25BA6 0%, #589DD6 100%)`
+            backgroundColor: COLORS.PRIMARY.BLUE
           }}
         >
           Send Reset Link

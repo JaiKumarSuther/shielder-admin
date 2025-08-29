@@ -1,19 +1,19 @@
 // Color constants
 export const COLORS = {
   PRIMARY: {
-    PURPLE: '#A25BA6',
-    BLUE: '#589DD6',
-    GRADIENT: 'linear-gradient(90deg, #A25BA6 0%, #589DD6 100%)',
+    BLUE: '#2563EB', // Professional blue
+    DARK_BLUE: '#1D4ED8', // Darker blue for hover states
+    LIGHT_BLUE: '#3B82F6', // Lighter blue for accents
   },
   SIDEBAR: {
-    PURPLE: '#9E5EA8',
-    BLUE: '#5C9AD4',
-    GRADIENT: 'linear-gradient(90deg, #9E5EA8 0%, #5C9AD4 100%)',
+    ACTIVE: '#2563EB', // Professional blue for active states
+    HOVER: '#F1F5F9', // Light gray for hover states
   },
   BACKGROUND: {
     SIDEBAR: '#FFFFFF',
     HEADER: '#FFFFFF',
-    CONTENT: '#F1F4F9',
+    CONTENT: '#F8FAFC', // Very light gray for content background
+    MAIN: '#F1F5F9', // Light gray for main background
   },
   STATUS: {
     UNRESTRICTED: {
@@ -24,6 +24,11 @@ export const COLORS = {
       BG: 'bg-red-100',
       TEXT: 'text-red-800',
     },
+  },
+  TEXT: {
+    PRIMARY: '#1E293B', // Dark slate for primary text
+    SECONDARY: '#64748B', // Medium slate for secondary text
+    MUTED: '#94A3B8', // Light slate for muted text
   },
 } as const;
 

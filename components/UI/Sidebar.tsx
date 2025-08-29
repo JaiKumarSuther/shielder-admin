@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { 
-  FiCheck, 
   FiList, 
   FiUsers, 
   FiSettings, 
@@ -65,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeNav, onNavChange }) => {
   };
 
   const getNavButtonClasses = (itemId: string) => {
-    const baseClasses = 'w-full flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-colors';
+    const baseClasses = 'w-full flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-colors cursor-pointer';
     const isActive = activeNav === itemId;
     const isNavigatingToThis = navigatingTo === [...navigationItems, ...bottomNavItems].find(item => item.id === itemId)?.path;
     
@@ -79,7 +78,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeNav, onNavChange }) => {
   };
 
   const getActiveStyle = (itemId: string) => {
-    return activeNav === itemId ? { background: COLORS.SIDEBAR.GRADIENT } : {};
+    return activeNav === itemId ? { backgroundColor: COLORS.SIDEBAR.ACTIVE } : {};
   };
 
   const SidebarContent = () => (
@@ -148,7 +147,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeNav, onNavChange }) => {
       <div className="lg:hidden fixed top-4 left-4 z-50">
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2 bg-white rounded-lg shadow-lg border border-gray-200"
+          className="p-2 bg-white rounded-lg shadow-lg border border-gray-200 cursor-pointer"
           aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? (
@@ -162,7 +161,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeNav, onNavChange }) => {
       {/* Mobile Overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="lg:hidden fixed inset-0 bg-black bg-opacity-25 z-40"
+          className="lg:hidden fixed inset-0 bg-[#00000080] z-40"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}

@@ -123,7 +123,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onForgotPassword, onSignUp }) => 
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="absolute inset-y-0 right-0 pr-3 flex items-center top-6"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center top-6 cursor-pointer"
             aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
             {showPassword ? (
@@ -141,16 +141,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onForgotPassword, onSignUp }) => 
               type="checkbox"
               checked={formData.rememberMe}
               onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
-              className="h-4 w-4 text-[#A25BA6] focus:ring-[#A25BA6] border-gray-300 rounded"
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+            <label htmlFor="remember-me" className="ml-2 block text-sm cursor-pointer text-gray-700">
               Remember me
             </label>
           </div>
           <button
             type="button"
             onClick={onForgotPassword}
-            className="text-sm text-[#A25BA6] hover:underline"
+            className="text-sm text-blue-600 hover:underline cursor-pointer"
           >
             Forgot Password?
           </button>
@@ -169,7 +169,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onForgotPassword, onSignUp }) => 
           <button
             type="button"
             onClick={onForgotPassword}
-            className="text-sm text-[#589DD6] hover:underline"
+            className="text-sm text-blue-600 hover:underline cursor-pointer"
           >
             Forgot password? Click here
           </button>
@@ -182,7 +182,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onForgotPassword, onSignUp }) => 
           <button
             type="button"
             onClick={onSignUp}
-            className="text-sm text-[#589DD6] hover:underline font-medium"
+            className="text-sm text-blue-600 hover:underline font-medium cursor-pointer"
           >
             Sign Up
           </button>

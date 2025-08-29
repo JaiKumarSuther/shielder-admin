@@ -43,7 +43,7 @@ const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   const modalContent = (
-    <div className="fixed inset-0 bg-[#cccccc] flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-[#00000080] flex items-center justify-center z-50 p-4">
       <div
         ref={modalRef}
         className={`bg-white rounded-lg shadow-xl w-full max-w-sm sm:max-w-md mx-auto transform transition-all ${className}`}
@@ -57,7 +57,7 @@ const Modal: React.FC<ModalProps> = ({
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+            className="text-gray-400 hover:text-gray-600 transition-colors p-1 cursor-pointer"
             aria-label="Close modal"
           >
             <FiX className="w-5 h-5 sm:w-6 sm:h-6" />

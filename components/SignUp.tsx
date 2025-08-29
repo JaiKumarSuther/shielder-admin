@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FiArrowLeft, FiEye, FiEyeOff, FiCheck } from 'react-icons/fi';
+import { COLORS } from '@/constants';
 
 interface SignUpProps {
   onBackToLogin: () => void;
@@ -58,9 +59,9 @@ export default function SignUp({ onBackToLogin }: SignUpProps) {
           </p>
           <button
             onClick={onBackToLogin}
-            className="w-full py-3 px-4 rounded-md text-white font-medium text-sm transition-all duration-200 hover:opacity-90"
+            className="w-full py-3 px-4 rounded-md text-white font-medium text-sm transition-all duration-200 hover:bg-blue-700"
             style={{
-              background: `linear-gradient(90deg, #A25BA6 0%, #589DD6 100%)`
+              backgroundColor: COLORS.PRIMARY.BLUE
             }}
           >
             Continue to Login
@@ -94,7 +95,7 @@ export default function SignUp({ onBackToLogin }: SignUpProps) {
               name="firstName"
               value={formData.firstName}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25BA6] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="First name"
               required
             />
@@ -109,7 +110,7 @@ export default function SignUp({ onBackToLogin }: SignUpProps) {
               name="lastName"
               value={formData.lastName}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25BA6] focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Last name"
               required
             />
@@ -127,7 +128,7 @@ export default function SignUp({ onBackToLogin }: SignUpProps) {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25BA6] focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Enter your email"
             required
           />
@@ -145,14 +146,14 @@ export default function SignUp({ onBackToLogin }: SignUpProps) {
               name="password"
               value={formData.password}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25BA6] focus:border-transparent"
+              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Create a password"
               required
             />
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
             >
               {showPassword ? (
                 <FiEyeOff className="h-5 w-5 text-gray-400" />
@@ -175,14 +176,14 @@ export default function SignUp({ onBackToLogin }: SignUpProps) {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A25BA6] focus:border-transparent"
+              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="Confirm your password"
               required
             />
             <button
               type="button"
               onClick={toggleConfirmPasswordVisibility}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
             >
               {showConfirmPassword ? (
                 <FiEyeOff className="h-5 w-5 text-gray-400" />
@@ -201,16 +202,16 @@ export default function SignUp({ onBackToLogin }: SignUpProps) {
             type="checkbox"
             checked={formData.agreeToTerms}
             onChange={handleInputChange}
-            className="h-4 w-4 text-[#A25BA6] focus:ring-[#A25BA6] border-gray-300 rounded mt-1"
+            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1"
             required
           />
-          <label htmlFor="agree-terms" className="ml-2 block text-sm text-gray-700">
+          <label htmlFor="agree-terms" className="ml-2 block text-sm cursor-pointer text-gray-700">
             I agree to the{' '}
-            <a href="#" className="text-[#589DD6] hover:underline">
+            <a href="#" className="text-blue-600 hover:underline">
               Terms of Service
             </a>{' '}
             and{' '}
-            <a href="#" className="text-[#589DD6] hover:underline">
+            <a href="#" className="text-blue-600 hover:underline">
               Privacy Policy
             </a>
           </label>
@@ -219,9 +220,9 @@ export default function SignUp({ onBackToLogin }: SignUpProps) {
         {/* Sign Up Button */}
         <button
           type="submit"
-          className="w-full py-3 px-4 rounded-md text-white font-medium text-sm transition-all duration-200 hover:opacity-90"
+          className="w-full py-3 px-4 rounded-md text-white font-medium text-sm transition-all duration-200 hover:bg-blue-700"
           style={{
-            background: `linear-gradient(90deg, #A25BA6 0%, #589DD6 100%)`
+            backgroundColor: COLORS.PRIMARY.BLUE
           }}
         >
           Create Account
@@ -232,7 +233,7 @@ export default function SignUp({ onBackToLogin }: SignUpProps) {
                       <button
               type="button"
               onClick={onBackToLogin}
-              className="flex items-center justify-center w-full py-3 px-4 rounded-md text-gray-700 font-medium text-sm border border-gray-300 hover:bg-gray-50 transition-all duration-200"
+              className="flex items-center justify-center w-full py-3 px-4 rounded-md text-gray-700 font-medium text-sm border border-gray-300 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
             >
               <FiArrowLeft className="h-4 w-4 mr-2" />
               Back to Login

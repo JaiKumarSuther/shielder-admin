@@ -46,9 +46,10 @@ shielder-admin/
 ## 🎨 Design System
 
 ### Colors
-- **Primary Gradient**: `#A25BA6` to `#589DD6`
-- **Sidebar Gradient**: `#9E5EA8` to `#5C9AD4`
-- **Background**: `#F1F4F9` (Content), `#FFFFFF` (Sidebar/Header)
+- **Primary Blue**: `#2563EB` (Professional blue for primary actions)
+- **Dark Blue**: `#1D4ED8` (Darker blue for hover states)
+- **Light Blue**: `#3B82F6` (Lighter blue for accents)
+- **Background**: `#F8FAFC` (Content), `#F1F5F9` (Main), `#FFFFFF` (Sidebar/Header)
 
 ### Components
 - **Button**: Multiple variants (primary, secondary, outline, ghost, danger)

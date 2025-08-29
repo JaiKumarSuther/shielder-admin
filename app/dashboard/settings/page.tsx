@@ -99,7 +99,7 @@ const Settings: React.FC = () => {
         <select
           value={profileData.timezone}
           onChange={(e) => setProfileData({ ...profileData, timezone: e.target.value })}
-          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A25BA6] focus:border-[#A25BA6]"
+          className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
         >
           <option value="UTC-5 (Eastern Time)">UTC-5 (Eastern Time)</option>
           <option value="UTC-6 (Central Time)">UTC-6 (Central Time)</option>
@@ -141,7 +141,7 @@ const Settings: React.FC = () => {
         <button
           onClick={() => setSecurityData({ ...securityData, twoFactorEnabled: !securityData.twoFactorEnabled })}
           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-            securityData.twoFactorEnabled ? 'bg-[#A25BA6]' : 'bg-gray-200'
+            securityData.twoFactorEnabled ? 'bg-blue-600' : 'bg-gray-200'
           }`}
         >
           <span
@@ -169,7 +169,7 @@ const Settings: React.FC = () => {
           <button
             onClick={() => setNotificationData({ ...notificationData, [key]: !value })}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              value ? 'bg-[#A25BA6]' : 'bg-gray-200'
+              value ? 'bg-blue-600' : 'bg-gray-200'
             }`}
           >
             <span
@@ -189,7 +189,7 @@ const Settings: React.FC = () => {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Language
         </label>
-        <select className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A25BA6] focus:border-[#A25BA6]">
+        <select className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
           <option value="en">English</option>
           <option value="es">Spanish</option>
           <option value="fr">French</option>
@@ -200,7 +200,7 @@ const Settings: React.FC = () => {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Theme
         </label>
-        <select className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A25BA6] focus:border-[#A25BA6]">
+        <select className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
           <option value="light">Light</option>
           <option value="dark">Dark</option>
           <option value="auto">Auto</option>
@@ -210,7 +210,7 @@ const Settings: React.FC = () => {
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Date Format
         </label>
-        <select className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A25BA6] focus:border-[#A25BA6]">
+        <select className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
           <option value="MM/DD/YYYY">MM/DD/YYYY</option>
           <option value="DD/MM/YYYY">DD/MM/YYYY</option>
           <option value="YYYY-MM-DD">YYYY-MM-DD</option>
@@ -279,9 +279,9 @@ const Settings: React.FC = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${
+                    className={`py-4 px-1 cursor-pointer border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors ${
                       activeTab === tab.id
-                        ? 'border-[#A25BA6] text-[#A25BA6]'
+                        ? 'border-blue-600 text-blue-600'
                         : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                     }`}
                   >

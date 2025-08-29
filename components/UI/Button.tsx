@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { BaseComponentProps } from '@/types';
+import { COLORS } from '@/constants';
 
 interface ButtonProps extends BaseComponentProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
@@ -26,7 +27,7 @@ const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variantClasses = {
-    primary: 'text-white hover:opacity-90 focus:ring-[#A25BA6]',
+    primary: 'text-white hover:bg-blue-700 focus:ring-blue-500',
     secondary: 'text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-gray-500',
     outline: 'text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-gray-500',
     ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
@@ -42,7 +43,7 @@ const Button: React.FC<ButtonProps> = ({
   const getPrimaryStyle = () => {
     if (variant === 'primary') {
       return {
-        background: 'linear-gradient(90deg, #A25BA6 0%, #589DD6 100%)',
+        backgroundColor: COLORS.PRIMARY.BLUE,
       };
     }
     return {};

@@ -1,8 +1,9 @@
 import LoadingSpinner from '../components/UI/LoadingSpinner';
+import { COLORS } from '@/constants';
 
 export default function RootLoading() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#A25BA6] to-[#589DD6]">
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: COLORS.BACKGROUND.MAIN }}>
       <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center space-y-4">
         <LoadingSpinner size="lg" />
         <p className="text-gray-600 font-medium">Loading...</p>

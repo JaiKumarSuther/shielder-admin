@@ -5,6 +5,7 @@ import Image from 'next/image';
 import LoginForm from '../components/LoginForm';
 import ForgotPassword from '../components/ForgotPassword';
 import SignUp from '../components/SignUp';
+import { COLORS } from '@/constants';
 
 type ViewType = 'login' | 'forgot-password' | 'signup';
 
@@ -35,7 +36,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#A25BA6] to-[#589DD6] flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundColor: COLORS.BACKGROUND.MAIN }}>
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-6 sm:mb-8">

@@ -73,7 +73,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onAction }) => {
               <div className="flex space-x-2">
                 <button
                   onClick={() => handleViewDetails(user)}
-                  className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                  className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors cursor-pointer"
                   title="View Details"
                   aria-label="View user details"
                 >
@@ -81,7 +81,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onAction }) => {
                 </button>
                 <button
                   onClick={() => handleEditUser(user)}
-                  className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                  className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors cursor-pointer"
                   title="Edit User"
                   aria-label="Edit user"
                 >
@@ -157,7 +157,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onAction }) => {
                   <div className="flex space-x-2">
                     <button
                       onClick={() => handleViewDetails(user)}
-                      className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors"
+                      className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors cursor-pointer"
                       title="View Details"
                       aria-label="View user details"
                     >
@@ -165,7 +165,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onAction }) => {
                     </button>
                     <button
                       onClick={() => handleEditUser(user)}
-                      className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors"
+                      className="p-2 text-green-600 hover:text-green-800 hover:bg-green-50 rounded-md transition-colors cursor-pointer"
                       title="Edit User"
                       aria-label="Edit user"
                     >
@@ -251,7 +251,7 @@ const UserTable: React.FC<UserTableProps> = ({ users, onAction }) => {
                 id="edit-status"
                 value={editForm.status}
                 onChange={(e) => setEditForm({ ...editForm, status: e.target.value as 'Unrestricted' | 'Restricted' })}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#A25BA6] focus:border-[#A25BA6]"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="Unrestricted">Unrestricted</option>
                 <option value="Restricted">Restricted</option>

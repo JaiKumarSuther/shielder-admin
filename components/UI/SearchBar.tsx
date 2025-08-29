@@ -17,7 +17,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, placeholder = 'S
       </div>
       <input
         type="text"
-        className="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-[#A25BA6] focus:border-[#A25BA6] text-sm sm:text-sm"
+        className="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-sm"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
